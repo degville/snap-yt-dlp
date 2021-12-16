@@ -1,0 +1,27 @@
+name: yt-dlp
+summary: A fork of youtube-dl with additional features and patches 
+description: |
+      Based on youtube-dl 2021.06.06 commit/379f52a and 
+      youtube-dlc 2020.11.11-3 commit/98e248f, youtube-dl offers all the
+      features and patches of youtube-dlc in addition to the latest youtube-dl
+adopt-info: yt-dlp
+grade: stable 
+confinement: strict
+base: core20 
+architectures:
+  - build-on: [arm64, armhf, amd64]
+
+apps:
+  yt-dlp:
+    command: bin/yt-dlp
+    plugs: [home, network, network-bind, removable-media]
+
+parts:
+  yt-dlp:
+    plugin: python
+    source: https://github.com/yt-dlp/yt-dlp.git
+    override-pull: |
+      snapcraftctl pull
+      snapcraftctl set-version \
+      "$(git describe --long --tags --always --match=v*.*.* | sed 's/v//')"
+
