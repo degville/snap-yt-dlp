@@ -26,3 +26,4 @@ parts:
       "$(git describe --long --tags --always --match=v*.*.* | sed 's/v//')"
     stage-packages:
       - ffmpeg
+      - libslang2
