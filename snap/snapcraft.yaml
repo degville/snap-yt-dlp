@@ -27,3 +27,5 @@ parts:
     stage-packages:
       - ffmpeg
       - libpulse0
+    organize:
+      usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio/libpulsecommon-13.99.so: usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libpulsecommon-13.99.so
