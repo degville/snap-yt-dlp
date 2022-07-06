@@ -24,4 +24,5 @@ parts:
       snapcraftctl pull
       snapcraftctl set-version \
       "$(git describe --long --tags --always --match=v*.*.* | sed 's/v//')"
-
+    stage-packages:
+      - ffmpeg
