@@ -9,7 +9,7 @@ grade: stable
 confinement: strict
 base: core20 
 architectures:
-  - build-on: [arm64, armhf, amd64]
+  - build-on: amd64
 
 apps:
   yt-dlp:
