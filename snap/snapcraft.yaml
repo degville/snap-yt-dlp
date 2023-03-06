@@ -16,6 +16,9 @@ apps:
     command: bin/yt-dlp
     plugs: [home, network, network-bind, removable-media]
 
+environment:
+  "LD_LIBRARY_PATH": "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/blas:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/lapack:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio"
+
 parts:
   yt-dlp:
     plugin: python
@@ -25,7 +28,7 @@ parts:
       snapcraftctl set-version \
       "$(git describe --long --tags --always --match=v*.*.* | sed 's/v//')"
     stage-packages:
+      - libavdevice58
+      - libblas3
       - ffmpeg
       - libpulse0
-    organize:
-      usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio/libpulsecommon-13.99.so: usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libpulsecommon-13.99.so
