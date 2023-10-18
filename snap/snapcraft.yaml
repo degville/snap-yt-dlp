@@ -10,25 +10,32 @@ confinement: strict
 base: core22
 architectures:
   - build-on: amd64
+  # - build-on: arm64
+  # - build-on: armhf
+
+plugs:
+  ffmpeg-2204:
+    interface: content
+    target: ffmpeg-platform
+    default-provider: ffmpeg-2204
 
 apps:
   yt-dlp:
     command: bin/yt-dlp
     plugs: [home, network, network-bind, removable-media]
-
-environment:
-  "LD_LIBRARY_PATH": "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/blas:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/lapack:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio"
+    environment:
+      LD_LIBRARY_PATH: $SNAP/ffmpeg-platform/usr/lib/$CRAFT_ARCH_TRIPLET
+      PATH: $SNAP/ffmpeg-platform/usr/bin:$PATH
 
 parts:
   yt-dlp:
     plugin: python
     source: https://github.com/yt-dlp/yt-dlp.git
+    source-tag: '2023.10.13'
     override-pull: |
-      snapcraftctl pull
-      snapcraftctl set-version \
-      "$(git describe --long --tags --always --match=v*.*.* | sed 's/v//')"
-    stage-packages:
-      - libavdevice58
-      - libblas3
-      - ffmpeg
-      - libpulse0
+      craftctl default
+      craftctl set version=$(git describe --tags --abbrev=0)
+    prime:
+      - -share
+      - -pyvenv.cfg
+      - -include
