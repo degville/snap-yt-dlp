@@ -18,14 +18,18 @@ plugs:
     interface: content
     target: ffmpeg-platform
     default-provider: ffmpeg-2204
+  gnome-42-2204:
+    interface: content
+    target: gnome-platform
+    default-provider: gnome-42-2204
 
 apps:
   yt-dlp:
     command: bin/yt-dlp
     plugs: [home, network, network-bind, removable-media]
     environment:
-      LD_LIBRARY_PATH: $SNAP/ffmpeg-platform/usr/lib/$CRAFT_ARCH_TRIPLET
-      PATH: $SNAP/ffmpeg-platform/usr/bin:$PATH
+      LD_LIBRARY_PATH: $SNAP/ffmpeg-platform/usr/lib/$CRAFT_ARCH_TRIPLET:$SNAP/gnome-platform/usr/lib:$SNAP/gnome-platform/usr/lib/$CRAFT_ARCH_TRIPLET:$SNAP/gnome-platform/usr/lib:$SNAP/gnome-platform/usr/lib/$CRAFT_ARCH_TRIPLET/pulseaudio:$SNAP/gnome-platform/usr/lib:$SNAP/gnome-platform/lib/$CRAFT_ARCH_TRIPLET:$SNAP/gnome-platform/usr/lib:$SNAP/gnome-platform/lib:$SNAP/gnome-platform/usr/lib:$SNAP/gnome-platform/usr/lib/$CRAFT_ARCH_TRIPLET/dri
+      PATH: $SNAP/ffmpeg-platform/usr/bin:$SNAP/gnome-platform/usr/bin:$PATH
 
 parts:
   yt-dlp:
@@ -37,5 +41,4 @@ parts:
       craftctl set version=$(git describe --tags --abbrev=0)
     prime:
       - -share
-      - -pyvenv.cfg
       - -include
