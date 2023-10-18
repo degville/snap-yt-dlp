@@ -10,8 +10,8 @@ confinement: strict
 base: core22
 architectures:
   - build-on: amd64
-  # - build-on: arm64
-  # - build-on: armhf
+  - build-on: arm64
+  - build-on: armhf
 
 plugs:
   ffmpeg-2204:
@@ -35,7 +35,7 @@ parts:
   yt-dlp:
     plugin: python
     source: https://github.com/yt-dlp/yt-dlp.git
-    source-tag: '2023.10.13'
+    #source-tag: '2023.10.13'
     override-pull: |
       craftctl default
       craftctl set version=$(git describe --tags --abbrev=0)
