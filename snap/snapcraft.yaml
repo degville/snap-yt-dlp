@@ -39,6 +39,31 @@ parts:
     override-pull: |
       craftctl default
       craftctl set version=$(git describe --tags --abbrev=0)
+    override-build: |
+      craftctl default
+      cd "$CRAFT_PART_INSTALL"/lib/python*/site-packages
+      IFS= find -name '*.cpython-*.pyc' | while read -r SRC; do
+        NAME=${SRC##*/}
+        mv "$SRC" "${SRC%/*}/../${NAME%.cpython-*}.pyc"
+      done
+    organize:
+      bin: bin~
+      bin~/python*: bin/
+      bin~/yt-dlp: bin/
     prime:
-      - -share
+      - -bin~
       - -include
+      - -lib/python*/site-packages/**/*.c
+      - -lib/python*/site-packages/**/*.py
+      - -lib/python*/site-packages/**/*.pyi
+      - -lib/python*/site-packages/**/__pycache__
+      - -lib/python*/site-packages/**/py.typed
+      - -lib/python*/site-packages/*.dist-info
+      - -lib/python*/site-packages/_distutils_hack
+      - -lib/python*/site-packages/distutils-precedence.pth
+      - -lib/python*/site-packages/pip
+      - -lib/python*/site-packages/pkg_resources
+      - -lib/python*/site-packages/setuptools
+      - -lib/python*/site-packages/wheel
+      - -lib[0-9]*
+      - -share
