@@ -13,23 +13,13 @@ architectures:
   - build-on: arm64
   - build-on: armhf
 
-plugs:
-  ffmpeg-2204:
-    interface: content
-    target: ffmpeg-platform
-    default-provider: ffmpeg-2204
-  gnome-42-2204:
-    interface: content
-    target: gnome-platform
-    default-provider: gnome-42-2204
-
 apps:
   yt-dlp:
     command: bin/yt-dlp
     plugs: [home, network, network-bind, removable-media]
     environment:
-      LD_LIBRARY_PATH: $SNAP/ffmpeg-platform/usr/lib/$CRAFT_ARCH_TRIPLET:$SNAP/gnome-platform/usr/lib:$SNAP/gnome-platform/usr/lib/$CRAFT_ARCH_TRIPLET:$SNAP/gnome-platform/usr/lib:$SNAP/gnome-platform/usr/lib/$CRAFT_ARCH_TRIPLET/pulseaudio:$SNAP/gnome-platform/usr/lib:$SNAP/gnome-platform/lib/$CRAFT_ARCH_TRIPLET:$SNAP/gnome-platform/usr/lib:$SNAP/gnome-platform/lib:$SNAP/gnome-platform/usr/lib:$SNAP/gnome-platform/usr/lib/$CRAFT_ARCH_TRIPLET/dri
-      PATH: $SNAP/ffmpeg-platform/usr/bin:$SNAP/gnome-platform/usr/bin:$PATH
+environment:
+  "LD_LIBRARY_PATH": "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/blas:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/lapack:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio"
 
 parts:
   yt-dlp:
@@ -38,7 +28,9 @@ parts:
     #source-tag: '2023.10.13'
     override-pull: |
       craftctl default
-      craftctl set version=$(git describe --tags --abbrev=0)
-    prime:
-      - -share
-      - -include
+      craftctl set version=$(git describe --tags)
+    stage-packages:
+      - libavdevice58
+      - libblas3
+      - ffmpeg
+      - libpulse0
