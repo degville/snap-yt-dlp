@@ -34,3 +34,4 @@ parts:
       - libblas3
       - ffmpeg
       - libpulse0
+      - python3-certifi
