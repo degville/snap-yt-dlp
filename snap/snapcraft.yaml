@@ -1,4 +1,5 @@
 name: yt-dlp
+title: YT-DLP
 summary: A fork of youtube-dl with additional features and patches 
 description: |
       Based on youtube-dl 2021.06.06 commit/379f52a and 
@@ -7,31 +8,52 @@ description: |
 adopt-info: yt-dlp
 grade: stable 
 confinement: strict
-base: core22
-architectures:
-  - build-on: amd64
-  - build-on: arm64
-  - build-on: armhf
+contact: graham.morrison@canonical.com
+issues: https://github.com/degville/snap-yt-dlp/issues
+donation: https://github.com/yt-dlp/yt-dlp/blob/master/Collaborators.md#collaborators
+source-code: https://github.com/yt-dlp/yt-dlp
+website: https://github.com/degville/snap-yt-dlp
+base: core24
+platforms:
+  amd64:
+  arm64:
+  armhf:
 
 apps:
   yt-dlp:
-    command: bin/yt-dlp
+    command: usr/bin/yt-dlp
     plugs: [home, network, network-bind, removable-media]
     environment:
-environment:
-  "LD_LIBRARY_PATH": "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/blas:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/lapack:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio"
+      PYTHONPATH: ${SNAP}/usr/lib/python3/dist-packages:${PYTHONPATH}
+      LD_LIBRARY_PATH: ${SNAP}/ffmpeg-platform/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}:${LD_LIBRARY_PATH}
+      PATH: ${SNAP}/ffmpeg-platform/usr/bin:${PATH}
+      REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
+
+plugs:
+  ffmpeg-2404:
+    interface: content
+    target: ffmpeg-platform
+    default-provider: ffmpeg-2404
 
 parts:
   yt-dlp:
     plugin: python
     source: https://github.com/yt-dlp/yt-dlp.git
     #source-tag: '2023.10.13'
+    source-depth: 1
     override-pull: |
       craftctl default
-      craftctl set version=$(git describe --tags)
-    stage-packages:
-      - libavdevice58
-      - libblas3
-      - ffmpeg
-      - libpulse0
-      - python3-certifi
+      craftctl set version=$(git describe --tags --abbrev=0)
+    prime:
+      - -usr/bin/activate*
+      - -usr/bin/Activate*
+      - -usr/bin/python*
+      - -usr/bin/pip*
+      - -include
+      - -lib
+      - -lib64
+      - -pyvenv.cfg
+      - -share
+    organize:
+      lib/python3.12/site-packages: usr/lib/python3/dist-packages
+      bin: usr/bin
