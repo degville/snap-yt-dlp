@@ -36,3 +36,14 @@ parts:
       - libpulse0
       - python3-certifi
       - python3-mutagen
+  deno:
+    plugin: rust
+    source: https://github.com/denoland/deno/archive/refs/tags/v2.6.3.tar.gz
+    source-type: tar
+    override-build: |
+      cargo build --locked --release
+      install -Dm755 ./target/release/deno "$SNAPCRAFT_PART_INSTALL/bin/deno"
+    build-packages:
+    - cmake
+    - clang
+    - libclang-dev
