@@ -29,6 +29,8 @@ parts:
     override-pull: |
       craftctl default
       craftctl set version=$(git describe --tags)
+    python-packages:
+      - curl-cffi>=0.11
     stage-packages:
       - libavdevice58
       - libblas3
