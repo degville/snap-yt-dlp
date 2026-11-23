@@ -7,11 +7,11 @@ description: |
 adopt-info: yt-dlp
 grade: stable 
 confinement: strict
-base: core22
-architectures:
-  - build-on: amd64
-  - build-on: arm64
-  - build-on: armhf
+base: core24
+platforms:
+  amd64:
+  arm64:
+  armhf:
 
 apps:
   yt-dlp:
@@ -19,7 +19,7 @@ apps:
     plugs: [home, network, network-bind, removable-media]
     environment:
       LD_LIBRARY_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/blas:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/lapack:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio"
-      PYTHONPATH: "$SNAP/usr/lib/python3/dist-packages:$SNAP_DESKTOP_RUNTIME/usr/lib/python3.10/site-packages:$PYTHONPATH"
+      PYTHONPATH: "$SNAP/usr/lib/python3/dist-packages:$SNAP_DESKTOP_RUNTIME/usr/lib/python3.12/site-packages:$PYTHONPATH"
 parts:
   yt-dlp:
     plugin: python
@@ -29,7 +29,7 @@ parts:
       craftctl default
       craftctl set version=$(git describe --tags)
     stage-packages:
-      - libavdevice58
+      - libavdevice60
       - libblas3
       - ffmpeg
       - libpulse0
