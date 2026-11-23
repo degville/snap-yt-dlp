@@ -38,11 +38,19 @@ parts:
     organize:
       usr/bin/ffmpeg: bin/ffmpeg
       usr/bin/ffprobe: bin/ffprobe
-  env-setup:
-    plugin: dump
-    source: snap/local
-    organize:
-      setup-env.sh: bin/setup-env.sh
+    override-prime: |
+      craftctl default
+      cat > "$CRAFT_PRIME/bin/setup-env.sh" << 'SCRIPT_EOF'
+      #!/bin/sh
+      case "$SNAP_ARCH" in
+        amd64) TRIPLET="x86_64-linux-gnu" ;;
+        arm64) TRIPLET="aarch64-linux-gnu" ;;
+        *) TRIPLET="x86_64-linux-gnu" ;;
+      esac
+      export LD_LIBRARY_PATH="$SNAP/usr/lib/$TRIPLET/blas:$SNAP/usr/lib/$TRIPLET/lapack:$SNAP/usr/lib/$TRIPLET:$SNAP/usr/lib/$TRIPLET/pulseaudio:$LD_LIBRARY_PATH"
+      exec "$@"
+      SCRIPT_EOF
+      chmod +x "$CRAFT_PRIME/bin/setup-env.sh"
   deno:
     plugin: rust
     source: https://github.com/denoland/deno/archive/refs/tags/v2.6.3.tar.gz
