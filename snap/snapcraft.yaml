@@ -18,6 +18,7 @@ apps:
     command: bin/yt-dlp
     plugs: [home, network, network-bind, removable-media]
     environment:
+      PATH: "$SNAP/usr/bin:$SNAP/bin:$PATH"
       LD_LIBRARY_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/blas:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/lapack:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio"
       PYTHONPATH: "$SNAP/usr/lib/python3/dist-packages:$SNAP_DESKTOP_RUNTIME/usr/lib/python3.12/site-packages:$PYTHONPATH"
 parts:
