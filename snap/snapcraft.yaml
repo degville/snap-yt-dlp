@@ -15,10 +15,10 @@ platforms:
 apps:
   yt-dlp:
     command: bin/yt-dlp
+    command-chain: [bin/setup-env.sh]
     plugs: [home, network, network-bind, removable-media]
     environment:
       PATH: "$SNAP/usr/bin:$SNAP/bin:$PATH"
-      LD_LIBRARY_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/blas:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/lapack:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio"
       PYTHONPATH: "$SNAP/usr/lib/python3/dist-packages:$SNAP_DESKTOP_RUNTIME/usr/lib/python3.12/site-packages:$PYTHONPATH"
 parts:
   yt-dlp:
@@ -38,6 +38,11 @@ parts:
     organize:
       usr/bin/ffmpeg: bin/ffmpeg
       usr/bin/ffprobe: bin/ffprobe
+  env-setup:
+    plugin: dump
+    source: snap/local
+    organize:
+      setup-env.sh: bin/setup-env.sh
   deno:
     plugin: rust
     source: https://github.com/denoland/deno/archive/refs/tags/v2.6.3.tar.gz
