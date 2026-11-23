@@ -11,7 +11,6 @@ base: core24
 platforms:
   amd64:
   arm64:
-  armhf:
 
 apps:
   yt-dlp:
@@ -36,6 +35,9 @@ parts:
       - libpulse0
       - python3-certifi
       - python3-mutagen
+    organize:
+      usr/bin/ffmpeg: bin/ffmpeg
+      usr/bin/ffprobe: bin/ffprobe
   deno:
     plugin: rust
     source: https://github.com/denoland/deno/archive/refs/tags/v2.6.3.tar.gz
