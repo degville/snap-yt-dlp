@@ -30,6 +30,7 @@ parts:
       craftctl set version=$(git describe --tags)
     python-packages:
       - curl-cffi>=0.11
+      - yt-dlp-ejs
     stage-packages:
       - libavdevice60
       - libblas3
